@@ -1,0 +1,55 @@
+{
+  "factors": [
+    {
+      "id": "grid-v1",
+      "source": "grid",
+      "unit": "kWh",
+      "kg_per_unit": 0.5,
+      "uncertainty": {
+        "kind": "interval",
+        "low": 0.4,
+        "high": 0.6
+      }
+    },
+    {
+      "id": "fuel-v1",
+      "source": "fuel",
+      "unit": "L",
+      "kg_per_unit": 2.5,
+      "uncertainty": {
+        "kind": "normal",
+        "sd": 0.1
+      }
+    }
+  ],
+  "activities": [
+    {
+      "id": "a1",
+      "amount": 100,
+      "unit": "kWh",
+      "factor": "grid-v1",
+      "allocation": {
+        "p1": 0.6,
+        "p2": 0.4
+      }
+    },
+    {
+      "id": "a2",
+      "amount": 50,
+      "unit": "kWh",
+      "factor": "grid-v1",
+      "allocation": {
+        "p1": 1
+      }
+    },
+    {
+      "id": "a3",
+      "amount": 10,
+      "unit": "L",
+      "factor": "fuel-v1",
+      "allocation": {
+        "p2": 1
+      }
+    }
+  ]
+}

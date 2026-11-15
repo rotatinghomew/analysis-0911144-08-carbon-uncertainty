@@ -43,8 +43,18 @@ def records(data):
     return data['activities']
 
 
+def factor_mapping(data):
+    return {row['id']: row for row in data['factors']}
+
+
+def emission_line(activity, factor):
+    """单条活动的中心值排放（kg），单位变换依赖在此统一保留。"""
+    converted_amount = convert(activity['amount'], activity['unit'], factor['unit'])
+    return converted_amount * factor['kg_per_unit'], converted_amount
+
+
 def summarize(data):
-    mapping = {row['id']: row for row in data['factors']}
+    mapping = factor_mapping(data)
     totals = defaultdict(float)
     missing = []
     for activity in data['activities']:
@@ -52,7 +62,7 @@ def summarize(data):
         if factor is None:
             missing.append(activity['id'])
             continue
-        value = convert(activity['amount'], activity['unit'], factor['unit']) * factor['kg_per_unit']
+        value, _ = emission_line(activity, factor)
         for product, share in activity['allocation'].items():
             totals[product] += value * share
     return {'known_kg': sum(totals.values()), 'products_kg': dict(totals), 'missing_factor_activities': missing, 'complete': not missing, 'meaning': '中心值核算，尚未传播不确定性'}

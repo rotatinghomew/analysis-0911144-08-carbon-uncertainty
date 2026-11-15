@@ -17,3 +17,15 @@ class Client:
 
     def summary(self, revision=None):
         return self.request('/summary' + ('' if revision is None else f'?revision={revision}'))
+
+    def uncertainty(self, revision=None):
+        return self.request('/uncertainty' + ('' if revision is None else f'?revision={revision}'))
+
+    def comparison(self, base_revision=None, target_revision=None):
+        query = []
+        if base_revision is not None:
+            query.append(f'from={base_revision}')
+        if target_revision is not None:
+            query.append(f'to={target_revision}')
+        suffix = ('?' + '&'.join(query)) if query else ''
+        return self.request('/comparison' + suffix)
